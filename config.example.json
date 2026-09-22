@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "router": {
+    "driver": "tp_link_archer_c80",
+    "base_url": "http://192.168.1.1",
+    "username": "admin"
+  },
+  "network": {
+    "lan_cidr": "192.168.1.0/24",
+    "pc_ip": "192.168.1.250",
+    "router_ip": "192.168.1.1"
+  },
+  "proxy": {
+    "address": "127.0.0.1",
+    "port": 10808
+  }
+}

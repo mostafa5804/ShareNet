@@ -1,0 +1,29 @@
+name: Router support request
+description: Request support for another exact router model
+title: "[Router]: "
+labels: [router-support]
+body:
+  - type: input
+    id: model
+    attributes:
+      label: Manufacturer and exact model
+    validations:
+      required: true
+  - type: input
+    id: firmware
+    attributes:
+      label: Firmware version and interface language
+    validations:
+      required: true
+  - type: textarea
+    id: api
+    attributes:
+      label: Public API or documentation link, if available
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy confirmation
+      options:
+        - label: I removed credentials, IPs, MAC addresses, serial numbers and SSIDs.
+          required: true
+

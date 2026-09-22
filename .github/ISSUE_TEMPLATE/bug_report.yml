@@ -1,0 +1,45 @@
+name: Bug report
+description: Report a reproducible ShareNet problem
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: "Never submit passwords, tokens, public IPs, MAC addresses, serial numbers or unredacted logs."
+  - type: input
+    id: version
+    attributes:
+      label: ShareNet version
+    validations:
+      required: true
+  - type: input
+    id: windows
+    attributes:
+      label: Windows version
+      placeholder: Windows 11 24H2 x64
+    validations:
+      required: true
+  - type: input
+    id: router
+    attributes:
+      label: Router model and firmware
+    validations:
+      required: true
+  - type: dropdown
+    id: connection
+    attributes:
+      label: PC connection
+      options: [Ethernet, Wi-Fi]
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: textarea
+    id: message
+    attributes:
+      label: Exact error message or sanitized diagnostic ZIP
+

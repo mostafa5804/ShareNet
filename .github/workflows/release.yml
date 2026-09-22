@@ -1,0 +1,48 @@
+name: Build Windows Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - name: Install dependencies
+        run: python -m pip install -r requirements-dev.txt
+      - name: Test
+        run: |
+          python -m pytest -q
+          python -m ruff check src tests
+      - name: Parse PowerShell runtime
+        shell: pwsh
+        run: .\tests\powershell_syntax.ps1
+      - name: Build EXE
+        run: python -m PyInstaller --noconfirm --clean ShareNet.spec
+      - name: Name release asset and create checksum
+        shell: pwsh
+        run: |
+          $source = Get-Item dist\ShareNet-v1.0.0-Windows-x64.exe
+          $releaseName = "ShareNet-$env:GITHUB_REF_NAME-Windows-x64.exe"
+          Move-Item $source.FullName (Join-Path $source.DirectoryName $releaseName)
+          $exe = Get-Item (Join-Path $source.DirectoryName $releaseName)
+          $hash = (Get-FileHash $exe -Algorithm SHA256).Hash.ToLowerInvariant()
+          "$hash  $($exe.Name)" | Set-Content dist\SHA256SUMS.txt -Encoding ascii
+      - name: Create GitHub Release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create $env:GITHUB_REF_NAME `
+            "dist/ShareNet-$env:GITHUB_REF_NAME-Windows-x64.exe" `
+            "dist/SHA256SUMS.txt" `
+            --verify-tag --generate-notes --title "ShareNet $env:GITHUB_REF_NAME"
